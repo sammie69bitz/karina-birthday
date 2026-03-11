@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🎀 A surprise for you...</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+:root {
+  --deep: #0f0020;
+  --purple: #6b21a8;
+  --violet: #9333ea;
+  --lavender: #c084fc;
+  --blush: #f0abfc;
+  --pink: #ff6eb4;
+  --gold: #fbbf24;
+  --mint: #6ee7b7;
+  --white: #fff9ff;
+}
+
+html, body {
+  width:100%; height:100%;
+  overflow:hidden;
+  background: var(--deep);
+  font-family: 'Nunito', sans-serif;
+}
+
+.stage {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.stage.hidden { opacity:0; pointer-events:none; transform:scale(0.95); }
+
+/* ═══ STAGE 1 ═══ */
+#stage1 {
+  background: radial-gradient(ellipse at 50% 55%, #2d0a5e 0%, #0f0020 100%);
+  z-index: 10;
+}
+#starCanvas { position:absolute; inset:0; pointer-events:none; }
+
+.s1-envelope {
+  animation: float-slow 3s ease-in-out infinite;
+  margin-bottom: 36px; z-index:1;
+}
+@keyframes float-slow {
+  0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-14px) rotate(2deg)}
+}
+
+.tap-btn {
+  font-family: 'Press Start 2P', monospace;
+  font-size: clamp(10px, 3vw, 13px);
+  color: #1a0533;
+  background: linear-gradient(135deg, #f0abfc, #c084fc);
+  border: none; border-radius: 16px;
+  padding: 18px 28px;
+  cursor: pointer; z-index:1;
+  box-shadow: 0 0 0 4px #6b21a8, 0 8px 40px rgba(192,132,252,0.5), 0 4px 0 6px #3b0764;
+  animation: pulse-glow 2s ease-in-out infinite;
+  transition: transform 0.1s;
+  line-height: 1.7; text-align:center;
+}
+@keyframes pulse-glow {
+  0%,100%{box-shadow:0 0 0 4px #6b21a8,0 8px 40px rgba(192,132,252,0.4),0 4px 0 6px #3b0764}
+  50%{box-shadow:0 0 0 6px #9333ea,0 12px 60px rgba(192,132,252,0.8),0 4px 0 8px #4a0080}
+}
+.tap-btn:active { transform:scale(0.94) translateY(3px); }
+
+.s1-hint {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px; color: rgba(240,171,252,0.45);
+  letter-spacing:1px; margin-top:20px; z-index:1;
+  animation: blink 1.6s step-end infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ═══ STAGE 2 ═══ */
+#stage2 {
+  background: radial-gradient(ellipse at 50% 30%, #5b1296 0%, #2a0858 45%, #0f0020 100%);
+  z-index:9; overflow:hidden; padding:20px 16px; gap:4px;
+}
+#flash {
+  position:fixed; inset:0; background:#a855f7;
+  z-index:999; opacity:0; pointer-events:none;
+}
+.conf-wrap { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+
+.cake-wrap {
+  opacity:0; transform:scale(0.2) rotate(-15deg);
+  transition:opacity 0.55s cubic-bezier(0.34,1.6,0.64,1), transform 0.55s cubic-bezier(0.34,1.6,0.64,1);
+  z-index:2; margin-bottom:8px;
+}
+.cake-wrap.show{opacity:1;transform:scale(1) rotate(0)}
+.cake-wrap svg {
+  image-rendering:pixelated;
+  filter:drop-shadow(0 0 28px rgba(240,171,252,0.65));
+  animation:cake-bob 2.5s ease-in-out infinite;
+}
+@keyframes cake-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+.hb-wrap { opacity:0; z-index:2; text-align:center; margin-bottom:12px; transition:opacity 0.4s; }
+.hb-wrap.show{opacity:1}
+.hb-top {
+  font-family:'Press Start 2P',monospace;
+  font-size:clamp(7px,2.5vw,11px); color:var(--mint);
+  display:block; letter-spacing:2px; margin-bottom:4px;
+  text-shadow:2px 2px 0 #065f46;
+}
+.hb-big {
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(36px,11vw,64px); color:#fff;
+  display:block; line-height:1.05;
+  text-shadow:3px 3px 0 #6b21a8, 0 0 40px rgba(240,171,252,0.7);
+}
+.hb-name {
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(44px,14vw,78px); display:block; line-height:1;
+  background:linear-gradient(130deg,var(--gold) 0%,var(--pink) 50%,var(--blush) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  filter:drop-shadow(0 0 18px rgba(251,191,36,0.5));
+  animation:name-shimmer 3s ease-in-out infinite;
+}
+@keyframes name-shimmer{0%,100%{filter:drop-shadow(0 0 18px rgba(251,191,36,0.4))}50%{filter:drop-shadow(0 0 32px rgba(255,110,180,0.8))}}
+
+.bounce-letter {
+  display:inline-block; opacity:0;
+  animation:letter-pop 0.5s cubic-bezier(0.34,1.6,0.64,1) forwards;
+}
+@keyframes letter-pop{
+  from{opacity:0;transform:translateY(50px) scale(0.2) rotate(-8deg)}
+  to{opacity:1;transform:translateY(0) scale(1) rotate(0)}
+}
+
+.gift-wrap {
+  opacity:0; transform:translateY(40px) scale(0.8);
+  transition:opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.5,0.64,1);
+  z-index:2; text-align:center;
+}
+.gift-wrap.show{opacity:1;transform:translateY(0) scale(1)}
+.gift-btn {
+  background:none; border:none; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  animation:gift-hop 1.8s ease-in-out infinite;
+}
+@keyframes gift-hop{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-9px) scale(1.06)}}
+.gift-btn svg{image-rendering:pixelated;filter:drop-shadow(0 0 18px rgba(251,191,36,0.7))}
+.gift-label {
+  font-family:'Press Start 2P',monospace;
+  font-size:clamp(7px,2.5vw,10px); color:var(--gold);
+  letter-spacing:1px; text-shadow:1px 1px 0 #78350f;
+  animation:blink 1.1s step-end infinite;
+}
+
+/* ═══ MODAL ═══ */
+#msgModal {
+  position:fixed; inset:0; z-index:300;
+  display:flex; align-items:flex-end; justify-content:center;
+  pointer-events:none; opacity:0; transition:opacity 0.4s;
+}
+#msgModal.open{opacity:1;pointer-events:all}
+.modal-bg {
+  position:absolute; inset:0;
+  background:rgba(8,0,20,0.78); backdrop-filter:blur(5px);
+}
+.modal-card {
+  position:relative; z-index:1;
+  width:100%; max-width:480px; max-height:90vh; overflow-y:auto;
+  background:linear-gradient(160deg,#3b0764 0%,#1a0336 100%);
+  border:2px solid rgba(192,132,252,0.5); border-bottom:none;
+  border-radius:28px 28px 0 0;
+  padding:28px 22px 52px;
+  transform:translateY(100%);
+  transition:transform 0.5s cubic-bezier(0.34,1.2,0.64,1);
+  box-shadow:0 -8px 60px rgba(147,51,234,0.4);
+}
+#msgModal.open .modal-card{transform:translateY(0)}
+.modal-pill {
+  width:44px; height:5px;
+  background:rgba(240,171,252,0.25); border-radius:99px;
+  margin:0 auto 22px;
+}
+.modal-title {
+  font-family:'Press Start 2P',monospace;
+  font-size:clamp(7px,2.8vw,10px); color:var(--blush);
+  text-align:center; letter-spacing:2px; margin-bottom:20px;
+  text-shadow:1px 1px 0 var(--purple);
+}
+.modal-msg {
+  font-size:clamp(15px,4vw,17px);
+  line-height:2; color:rgba(255,249,255,0.92);
+  font-weight:700; text-align:center;
+}
+.modal-msg .c1{color:var(--blush)}
+.modal-msg .c2{color:var(--gold)}
+.modal-msg .c3{color:var(--lavender)}
+.modal-msg .c4{color:var(--mint)}
+.modal-msg .c5{color:var(--pink)}
+
+.heart-row {
+  display:flex; gap:6px; justify-content:center;
+  flex-wrap:wrap; margin:20px 0 0;
+}
+.h-pixel{
+  image-rendering:pixelated;
+  animation:hpulse 1.2s ease-in-out infinite;
+}
+.h-pixel:nth-child(2){animation-delay:.15s}
+.h-pixel:nth-child(3){animation-delay:.3s}
+.h-pixel:nth-child(4){animation-delay:.45s}
+.h-pixel:nth-child(5){animation-delay:.6s}
+@keyframes hpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+.modal-divider{
+  width:60px; height:2px;
+  background:linear-gradient(90deg,transparent,var(--lavender),transparent);
+  margin:22px auto;
+}
+.modal-sig {
+  font-family:'Press Start 2P',monospace;
+  font-size:clamp(7px,2.5vw,10px);
+  color:rgba(192,132,252,0.6);
+  text-align:center; line-height:2.4; letter-spacing:1px;
+}
+.sig-name {
+  display:inline-block; color:var(--gold);
+  font-size:clamp(10px,3.5vw,14px);
+  text-shadow:1px 1px 0 #78350f, 0 0 20px rgba(251,191,36,0.5);
+  animation:sigshine 2.5s ease-in-out infinite;
+}
+@keyframes sigshine{0%,100%{color:var(--gold)}50%{color:var(--pink)}}
+.close-btn {
+  margin-top:26px; width:100%;
+  font-family:'Press Start 2P',monospace; font-size:8px;
+  color:rgba(240,171,252,0.35);
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(240,171,252,0.12); border-radius:12px;
+  padding:14px; cursor:pointer; letter-spacing:1px;
+  transition:background 0.2s;
+}
+.close-btn:active{background:rgba(255,255,255,0.1)}
+</style>
+</head>
+<body>
+
+<div id="flash"></div>
+
+<!-- STAGE 1 -->
+<div class="stage" id="stage1">
+  <canvas id="starCanvas"></canvas>
+  <div class="s1-envelope">
+    <svg viewBox="0 0 48 40" width="150" height="125" style="image-rendering:pixelated;filter:drop-shadow(0 0 24px rgba(192,132,252,0.8))">
+      <rect x="2" y="8" width="44" height="30" fill="#9333ea"/>
+      <rect x="2" y="8" width="44" height="2" fill="#7e22ce"/>
+      <rect x="2" y="36" width="44" height="2" fill="#7e22ce"/>
+      <rect x="2" y="8" width="2" height="30" fill="#7e22ce"/>
+      <rect x="44" y="8" width="2" height="30" fill="#7e22ce"/>
+      <polygon points="2,8 24,26 46,8" fill="#a855f7"/>
+      <line x1="2" y1="38" x2="22" y2="24" stroke="#7e22ce" stroke-width="2"/>
+      <line x1="46" y1="38" x2="26" y2="24" stroke="#7e22ce" stroke-width="2"/>
+      <rect x="20" y="18" width="3" height="2" fill="#ff6eb4"/>
+      <rect x="25" y="18" width="3" height="2" fill="#ff6eb4"/>
+      <rect x="19" y="19" width="10" height="3" fill="#ff6eb4"/>
+      <rect x="20" y="22" width="8" height="2" fill="#ff6eb4"/>
+      <rect x="21" y="24" width="6" height="1" fill="#ff6eb4"/>
+      <rect x="22" y="25" width="4" height="1" fill="#ff6eb4"/>
+      <rect x="23" y="26" width="2" height="1" fill="#ff6eb4"/>
+      <rect x="6" y="12" width="2" height="2" fill="#fbbf24" opacity="0.9"/>
+      <rect x="40" y="28" width="2" height="2" fill="#fbbf24" opacity="0.9"/>
+      <rect x="38" y="12" width="2" height="2" fill="#f0abfc" opacity="0.8"/>
+      <rect x="7" y="30" width="2" height="2" fill="#f0abfc" opacity="0.8"/>
+    </svg>
+  </div>
+  <button class="tap-btn" id="tapBtn">🎀 TAP FOR YOUR<br>SURPRISE 🎀</button>
+  <p class="s1-hint">✨ something special awaits ✨</p>
+</div>
+
+<!-- STAGE 2 -->
+<div class="stage hidden" id="stage2">
+  <div class="conf-wrap" id="confWrap"></div>
+  <div class="cake-wrap" id="cakeEl">
+    <svg viewBox="0 0 48 46" width="190" height="182" style="image-rendering:pixelated">
+      <rect x="10" y="1" width="3" height="3" fill="#ffdd57"/>
+      <rect x="22" y="0" width="3" height="4" fill="#ff9f43"/>
+      <rect x="34" y="1" width="3" height="3" fill="#ffdd57"/>
+      <rect x="11" y="2" width="1" height="1" fill="#fff"/>
+      <rect x="23" y="1" width="1" height="1" fill="#fff"/>
+      <rect x="35" y="2" width="1" height="1" fill="#fff"/>
+      <rect x="10" y="4" width="3" height="6" fill="#ff6eb4"/>
+      <rect x="22" y="4" width="3" height="6" fill="#c084fc"/>
+      <rect x="34" y="4" width="3" height="6" fill="#6ee7b7"/>
+      <rect x="9" y="10" width="30" height="8" fill="#f0abfc"/>
+      <rect x="9" y="10" width="30" height="2" fill="#e879f9"/>
+      <rect x="12" y="13" width="2" height="2" fill="#fff" opacity="0.8"/>
+      <rect x="18" y="12" width="2" height="2" fill="#fbbf24"/>
+      <rect x="24" y="13" width="2" height="2" fill="#fff" opacity="0.8"/>
+      <rect x="30" y="12" width="2" height="2" fill="#fbbf24"/>
+      <rect x="5" y="18" width="38" height="9" fill="#fff0ff"/>
+      <rect x="5" y="18" width="38" height="2" fill="#e879f9"/>
+      <rect x="7" y="21" width="3" height="3" fill="#fbbf24"/>
+      <rect x="13" y="20" width="3" height="3" fill="#ff6eb4"/>
+      <rect x="19" y="21" width="3" height="3" fill="#c084fc"/>
+      <rect x="25" y="20" width="3" height="3" fill="#6ee7b7"/>
+      <rect x="31" y="21" width="3" height="3" fill="#fbbf24"/>
+      <rect x="37" y="20" width="3" height="3" fill="#ff6eb4"/>
+      <rect x="1" y="27" width="46" height="12" fill="#fce7ff"/>
+      <rect x="1" y="27" width="46" height="2" fill="#e879f9"/>
+      <rect x="3" y="30" width="3" height="3" fill="#c084fc"/>
+      <rect x="9" y="31" width="3" height="3" fill="#fbbf24"/>
+      <rect x="16" y="30" width="3" height="3" fill="#ff6eb4"/>
+      <rect x="23" y="31" width="3" height="3" fill="#6ee7b7"/>
+      <rect x="30" y="30" width="3" height="3" fill="#c084fc"/>
+      <rect x="37" y="31" width="3" height="3" fill="#fbbf24"/>
+      <rect x="43" y="30" width="3" height="3" fill="#ff6eb4"/>
+      <rect x="0" y="39" width="48" height="3" fill="#9333ea"/>
+      <rect x="0" y="42" width="48" height="2" fill="#6b21a8"/>
+    </svg>
+  </div>
+  <div class="hb-wrap" id="hbEl">
+    <span class="hb-top">✨ today is your day ✨</span>
+    <span class="hb-big" id="hbBig"></span>
+    <span class="hb-name" id="hbName"></span>
+  </div>
+  <div class="gift-wrap" id="giftEl">
+    <button class="gift-btn" id="giftBtn">
+      <svg viewBox="0 0 32 32" width="92" height="92" style="image-rendering:pixelated">
+        <rect x="2" y="14" width="28" height="16" fill="#fbbf24"/>
+        <rect x="2" y="14" width="28" height="3" fill="#f59e0b"/>
+        <rect x="2" y="27" width="28" height="3" fill="#d97706"/>
+        <rect x="14" y="14" width="4" height="16" fill="#ff6eb4"/>
+        <rect x="4" y="8" width="5" height="7" fill="#ff6eb4"/>
+        <rect x="4" y="8" width="5" height="2" fill="#f472b6"/>
+        <rect x="23" y="8" width="5" height="7" fill="#ff6eb4"/>
+        <rect x="23" y="8" width="5" height="2" fill="#f472b6"/>
+        <rect x="13" y="9" width="6" height="7" fill="#f472b6"/>
+        <rect x="14" y="10" width="4" height="5" fill="#ff6eb4"/>
+        <rect x="15" y="11" width="2" height="3" fill="#fbbf24"/>
+        <rect x="5" y="17" width="3" height="2" fill="rgba(255,255,255,0.35)"/>
+        <rect x="22" y="20" width="2" height="2" fill="rgba(255,255,255,0.5)"/>
+        <rect x="6" y="23" width="2" height="2" fill="rgba(255,255,255,0.5)"/>
+      </svg>
+      <span class="gift-label">🎁 there's a little something for you 🎁</span>
+    </button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="msgModal">
+  <div class="modal-bg" id="modalBg"></div>
+  <div class="modal-card">
+    <div class="modal-pill"></div>
+    <div class="modal-title">✨ open this one slowly ✨</div>
+    <div class="modal-msg">
+      <span class="c1">Hey Karina 🌸</span><br><br>
+      I just wanted to take a second on your birthday to say —
+      you're genuinely one of the <span class="c2">most special people</span> I know. 🎂<br><br>
+      The way you laugh, the way you carry yourself —
+      there's something about you that's just <span class="c3">hard to ignore.</span> ✨<br><br>
+      I hope today feels as <span class="c2">bright and warm</span> as you make
+      things feel for the people around you 🌼<br><br>
+      You deserve every good thing coming your way —
+      and honestly? <span class="c5">I'm really glad I know you.</span> 💜<br><br>
+      Have the most amazing birthday, Karina.<br>
+      <span class="c4">You deserve all of it. 🎉</span>
+    </div>
+    <div class="heart-row" id="heartRow"></div>
+    <div class="modal-divider"></div>
+    <div class="modal-sig">
+      happy birthday 🎀<br>
+      — <span class="sig-name">Sammie&nbsp;✨</span>
+    </div>
+    <button class="close-btn" id="closeBtn">[ close × ]</button>
+  </div>
+</div>
+
+<script>
+/* STARS */
+const canvas = document.getElementById('starCanvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+function initStars(){
+  stars = Array.from({length:130},()=>({
+    x:Math.random()*canvas.width, y:Math.random()*canvas.height,
+    r:Math.random()*1.8+0.3, a:Math.random(),
+    da:(Math.random()*0.006+0.002)*(Math.random()<0.5?1:-1)
+  }));
+}
+function drawStars(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  stars.forEach(s=>{
+    s.a+=s.da; if(s.a<=0||s.a>=1) s.da*=-1;
+    ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,249,255,${s.a})`; ctx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+resize(); initStars(); drawStars();
+window.addEventListener('resize',()=>{resize();initStars();});
+
+/* CONFETTI */
+const CC=['#ff6eb4','#c084fc','#fbbf24','#6ee7b7','#7dd3fc','#fff','#f0abfc','#e879f9'];
+const kf=document.createElement('style');
+kf.textContent=`@keyframes cffall{0%{opacity:1;transform:translateY(0) rotateZ(0) translateX(0)}100%{opacity:0;transform:translateY(105vh) rotateZ(600deg) translateX(var(--cx))}}`;
+document.head.appendChild(kf);
+function confetti(n=70){
+  const w=document.getElementById('confWrap');
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div');
+    const sz=5+Math.random()*9, cx=(Math.random()-0.5)*320;
+    const delay=Math.random()*2, dur=2+Math.random()*2.5;
+    el.style.cssText=`position:absolute;width:${sz}px;height:${sz}px;border-radius:${Math.random()<0.4?'50%':'2px'};background:${CC[Math.floor(Math.random()*CC.length)]};left:${5+Math.random()*90}%;top:-15px;opacity:0;animation:cffall ${dur}s ease-in ${delay}s forwards;--cx:${cx}px`;
+    w.appendChild(el);
+    setTimeout(()=>el.remove(),(dur+delay+0.5)*1000);
+  }
+}
+
+/* BOUNCY TEXT */
+function bouncy(text,el){
+  el.innerHTML='';
+  [...text].forEach((ch,i)=>{
+    const s=document.createElement('span');
+    s.className='bounce-letter';
+    s.textContent=ch===' '?'\u00a0':ch;
+    s.style.animationDelay=(i*0.065)+'s';
+    el.appendChild(s);
+  });
+}
+
+/* HEARTS */
+const HCS=['#ff6eb4','#c084fc','#fbbf24','#6ee7b7','#f0abfc'];
+const ns='http://www.w3.org/2000/svg';
+function makeHeart(color){
+  const svg=document.createElementNS(ns,'svg');
+  svg.setAttribute('viewBox','0 0 10 9');
+  svg.setAttribute('width','24'); svg.setAttribute('height','24');
+  svg.classList.add('h-pixel');
+  [[1,0,3,2],[6,0,3,2],[0,1,5,3],[5,1,5,3],[1,4,8,2],[2,6,6,2],[3,8,4,1]].forEach(([x,y,w,h])=>{
+    const r=document.createElementNS(ns,'rect');
+    r.setAttribute('x',x);r.setAttribute('y',y);r.setAttribute('width',w);r.setAttribute('height',h);r.setAttribute('fill',color);
+    svg.appendChild(r);
+  });
+  return svg;
+}
+const hr=document.getElementById('heartRow');
+HCS.forEach(c=>hr.appendChild(makeHeart(c)));
+
+/* STAGE SWITCH */
+const stage1=document.getElementById('stage1');
+const stage2=document.getElementById('stage2');
+const flashEl=document.getElementById('flash');
+
+document.getElementById('tapBtn').addEventListener('click',()=>{
+  flashEl.style.transition='opacity 0.1s'; flashEl.style.opacity='1';
+  setTimeout(()=>{flashEl.style.transition='opacity 0.3s'; flashEl.style.opacity='0';},120);
+  setTimeout(()=>{stage1.classList.add('hidden'); stage2.classList.remove('hidden');},180);
+  setTimeout(()=>document.getElementById('cakeEl').classList.add('show'),420);
+  setTimeout(()=>{
+    const hb=document.getElementById('hbEl'); hb.classList.add('show');
+    bouncy('Happy Birthday',document.getElementById('hbBig'));
+    bouncy('Karina! 🎉',document.getElementById('hbName'));
+    confetti(90);
+  },960);
+  setTimeout(()=>{
+    document.getElementById('giftEl').classList.add('show');
+    setInterval(()=>confetti(28),5200);
+  },1900);
+});
+
+/* GIFT */
+document.getElementById('giftBtn').addEventListener('click',()=>{
+  document.getElementById('msgModal').classList.add('open');
+  confetti(50);
+});
+document.getElementById('modalBg').addEventListener('click',closeModal);
+document.getElementById('closeBtn').addEventListener('click',closeModal);
+function closeModal(){document.getElementById('msgModal').classList.remove('open');}
+</script>
+</body>
+</html>
